@@ -2,9 +2,11 @@
   "name": "e-commerce",
   "version": "1.0.0",
   "description": "A simple E-commerce application",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "babel server --out-dir dist",
+    "start": "node dist/server.js",
+    "start:dev": "nodemon --exec babel-node server/server.js"
   },
   "author": "Okwuidegbe Emmanuel",
   "license": "ISC",
