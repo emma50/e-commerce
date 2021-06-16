@@ -1,11 +1,14 @@
 import express from 'express';
 import 'airbnb-browser-shims';
-import winston from 'winston'
+import routes from './routes/routes';
+import winston from 'winston';
 
 const app = express();
 
-app.get('/', (req, res) => {
-  res.send('Welcome to E-Commerce');
+routes(app);
+
+process.on('unhandledRejection', (e) => {
+  console.log('Something went wrong');
 });
 
 const port = process.env.PORT || 3000;

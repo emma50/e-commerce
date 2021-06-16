@@ -1,8 +1,12 @@
 import mongoose from 'mongoose'
-import Schema from '../db'
+import Schema from '../db/index'
 
 const userSchema = new Schema({
-  name: {
+  firstName: {
+    type: String,
+    required: true
+  },
+  lastName: {
     type: String,
     required: true
   },
@@ -10,10 +14,9 @@ const userSchema = new Schema({
     type: String,
     required: [true,'Please enter an email'],
     unique: true,
-    lowercase: true,
-    validate: [isEmail, 'Please enter a valid email']
+    lowercase: true
   },
-  password: {
+  hash: {
     type: String,
     required: [true, 'Please enter a valid password'],
     minlength: [6, 'Minimum password length must be 6 characters']
