@@ -1,14 +1,23 @@
 import mongoose from 'mongoose';
-import node_env from '../config/env';
+import dotenv from 'dotenv';
 
-node_env()
+dotenv.config()
 
-const db = mongoose.connect(`mongodb://localhost:27017/${process.env.DB}`, {
+const url = `mongodb://localhost:27017/${process.env.DATABASE}`
+mongoose.connect(url, {
   useNewUrlParser: true, 
   useUnifiedTopology: true,
   useCreateIndex: true 
 });
 
-const Schema = db.schema
+export default mongoose.Schema
 
-export default Schema
+const db = mongoose.connection
+
+db.once('open', _ => {
+  console.log('Database connected:', url)
+})
+
+db.on('error', err => {
+  console.error('connection error:', err)
+})
