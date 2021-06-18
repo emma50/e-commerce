@@ -10,14 +10,18 @@ mongoose.connect(url, {
   useCreateIndex: true 
 });
 
-export default mongoose.Schema
+mongoose.Promise = global.Promise
 
-const db = mongoose.connection
+const Schema = mongoose.Schema
+const connection = mongoose.connection
 
-db.once('open', _ => {
+connection.once('open', _ => {
   console.log('Database connected:', url)
 })
 
-db.on('error', err => {
+connection.on('error', err => {
   console.error('connection error:', err)
 })
+
+export default Schema
+export { connection }
