@@ -11,9 +11,9 @@ before_script:
   - npm install
   - sleep 15
   - mongo mydb_test --eval 'db.createUser({user:"travis",pwd:"test",roles:["readWrite"]});'
+  - npm run test
 script: 
   - npm run coveralls
   - npm run coverage
-
 notifications:
   email: true
