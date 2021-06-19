@@ -4,14 +4,14 @@ node_js:
 services: 
   - mongodb
   - redis-server
-# env:
-#   # global:
-#   - secure: MYh2cixM4JjZu26SExOtB8OY3eQGg86N4jsCbPN0psNtguaHOl7FOxtIBTVt/YPpgp2vxUKW11F3AUyDc8SE7N/9nQofj0E4s6zZz+LotpONSaLD0s3fT/EOG5qAr/F/sQARiyfOFlNbSxrTlRB7wt0h36G4K/QeLJ/z6NHpRh4/fGfm9M8wLSytmTPCsgvfo3hyVBPuqKBkfFaEJ6sujxj1JzaXWecTvoD6JQfp4N8quW0U09G7/6usjdTTgPp9GVXQSKsfX/0j1sHPZLF2bZUTzJDlQ2lJL+Q7X3MSCaAq40OU5jozJ4vtWYkXnDtlVeFydfd5gE8kDEXl6O/o67AUTPAz2yNmN7bVXThMrVbd9cihbN+KMQNg5b2c+kPw7Ii3SIUr6nZuQAha3gAlZndAgBpk7+PlKq6YqzYDsAMjfKb50PKSu2bWrhvlKNOCUzjt4ADmuPKhZOk81RgMdlzMrHfGgJiJpEfY+raVeBpUgN+xzWSPMRkTKRcM9+ocGMCWgbbaY1zfqc7ew8kYBpgEN+B2A6uDuhbkkjAbsUdQxfXkFajXtPT67LG2mGC4GuPoV5NHeiX7RmONChy5lkh8pljnGfwFe7j/ao7d2VB+Dp7YEOt6MaGvCMxUWEyyEWoMHsaIWqiuzDvNSjN5dhtPCeiOQhq7c/vQUKY2Vog=
+env:
+  global:
+    - secure: MYh2cixM4JjZu26SExOtB8OY3eQGg86N4jsCbPN0psNtguaHOl7FOxtIBTVt/YPpgp2vxUKW11F3AUyDc8SE7N/9nQofj0E4s6zZz+LotpONSaLD0s3fT/EOG5qAr/F/sQARiyfOFlNbSxrTlRB7wt0h36G4K/QeLJ/z6NHpRh4/fGfm9M8wLSytmTPCsgvfo3hyVBPuqKBkfFaEJ6sujxj1JzaXWecTvoD6JQfp4N8quW0U09G7/6usjdTTgPp9GVXQSKsfX/0j1sHPZLF2bZUTzJDlQ2lJL+Q7X3MSCaAq40OU5jozJ4vtWYkXnDtlVeFydfd5gE8kDEXl6O/o67AUTPAz2yNmN7bVXThMrVbd9cihbN+KMQNg5b2c+kPw7Ii3SIUr6nZuQAha3gAlZndAgBpk7+PlKq6YqzYDsAMjfKb50PKSu2bWrhvlKNOCUzjt4ADmuPKhZOk81RgMdlzMrHfGgJiJpEfY+raVeBpUgN+xzWSPMRkTKRcM9+ocGMCWgbbaY1zfqc7ew8kYBpgEN+B2A6uDuhbkkjAbsUdQxfXkFajXtPT67LG2mGC4GuPoV5NHeiX7RmONChy5lkh8pljnGfwFe7j/ao7d2VB+Dp7YEOt6MaGvCMxUWEyyEWoMHsaIWqiuzDvNSjN5dhtPCeiOQhq7c/vQUKY2Vog=
 before_script:
   - npm install
-  - sleep 15
+  - sleep 20
   - mongo mydb_test --eval 'db.createUser({user:"travis",pwd:"test",roles:["readWrite"]});'
-  - npm run test
+  # - npm run test
 script: 
   - npm run coveralls
   - npm run coverage
