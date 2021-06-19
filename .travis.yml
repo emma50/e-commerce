@@ -14,6 +14,5 @@ before_script:
 script: 
   - npm run coveralls
   - npm run coverage
-
 notifications:
   email: true
