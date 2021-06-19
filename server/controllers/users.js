@@ -1,6 +1,7 @@
 import User from '../models/userModel';
 import auth_tok from '../helpers/authentication/auth-token';
 import userObjects from '../middleware/userObjects';
+import db from '../db/index'
 
 class userController {
   static async userSignup(req, res) {
@@ -8,8 +9,7 @@ class userController {
     const values = userObjects.newUser(hash, req);
 
     try {
-      const newUser = await new User(values);
-      await newUser.save()
+      const newUser = await db.query(new User(values).save())
       const {
         _id, firstName, lastName, email,
       } = newUser;
