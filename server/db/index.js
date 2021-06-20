@@ -3,7 +3,8 @@ import dotenv from 'dotenv';
 
 dotenv.config()
 
-const url = `mongodb://localhost:27017/${process.env.DATABASE}`
+// const url = `mongodb://localhost:27017/${process.env.DATABASE}`
+const url = `mongodb://127.0.0.1:27017/${process.env.DATABASE}`
 const pool = mongoose.connect(url, {
   useNewUrlParser: true, 
   useUnifiedTopology: true,

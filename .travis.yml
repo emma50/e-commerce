@@ -7,8 +7,8 @@ services:
   - redis-server
 before_script:
   - npm install
-  - sleep 30
-  - mongo mydb_test --eval 'db.createUser({user:"travis",pwd:"test",roles:["readWrite"]});'
+  # - sleep 30
+  # - mongo mydb_test --eval 'db.createUser({user:"travis",pwd:"test",roles:["readWrite"]});'
   # - npm test
 script: 
   - npm test
