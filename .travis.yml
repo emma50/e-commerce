@@ -1,8 +1,8 @@
 language: node_js
 node_js:
   - "14.16.0"
-  - "12.14.1"
-services: 
+  # - "12.14.1"
+services:
   - mongodb
   - redis-server
 env:
