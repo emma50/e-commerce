@@ -6,12 +6,14 @@ services:
   # - redis-server
 before_script:
   - npm install
-  # - sleep 20
-  # - mongo mydb_test --eval 'db.createUser({user:"travis",pwd:"test",roles:["readWrite"]});'
-script: 
+  - sleep 100
+  - mongo mydb_test --eval 'db.createUser({user:"travis",pwd:"test",roles:["readWrite"]});'
   - npm test
-after_script:
+script: 
   - npm run coverage
   - npm run coveralls
+# after_script:
+#   - npm run coverage
+#   - npm run coveralls
 notifications:
   email: true
