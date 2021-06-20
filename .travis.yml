@@ -4,11 +4,11 @@ node_js:
   - "14.16.0"
 services:
   - mongodb
-  # - redis-server
+  - redis-server
 before_script:
   - npm install
-  # - sleep 100
-  # - mongo mydb_test --eval 'db.createUser({user:"travis",pwd:"test",roles:["readWrite"]});'
+  - sleep 30
+  - mongo mydb_test --eval 'db.createUser({user:"travis",pwd:"test",roles:["readWrite"]});'
   # - npm test
 script: 
   - npm test
