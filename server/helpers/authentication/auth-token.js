@@ -1,17 +1,17 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import redis from 'redis'
-import dotenv from 'dotenv'
+import redis from 'redis';
+import dotenv from 'dotenv';
 
-dotenv.config()
+dotenv.config();
 
-const client = redis.createClient()
+const client = redis.createClient();
 
-client.on("error", function(error) {
+client.on('error', (error) => {
   console.error(error);
 });
 
-const auth_token = {
+const authToken = {
   hashPassword(password) {
     return bcrypt.hashSync(password, bcrypt.genSaltSync(10));
   },
@@ -19,20 +19,20 @@ const auth_token = {
   generateToken(id, email) {
     const token = jwt.sign({
       userId: id, uEmail: email,
-    }, process.env.JWT_PRIVATE_KEY, { expiresIn: '2 days'});
+    }, process.env.JWT_PRIVATE_KEY, { expiresIn: '2 days' });
 
     return Promise.resolve(token);
   },
 
-  setToken (key, value) {
-    Promise.resolve(client.set(key, value))
+  setToken(key, value) {
+    Promise.resolve(client.set(key, value));
   },
 
   async generateSession(id, uEmail) {
-    const token = await this.generateToken(id, uEmail)
-    await this.setToken('userToken', token)
+    const token = await this.generateToken(id, uEmail);
+    await this.setToken('userToken', token);
     return token;
-  }
+  },
 };
 
-export default auth_token;
+export default authToken;

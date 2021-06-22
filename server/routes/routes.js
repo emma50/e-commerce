@@ -6,7 +6,7 @@ import users from './users';
 
 export default (app) => {
   app.use(cors());
-  app.use(helmet())
+  app.use(helmet());
   app.use(morgan('combined'));
   app.use(bodyParser.urlencoded({ extended: true }));
   app.use(bodyParser.json());

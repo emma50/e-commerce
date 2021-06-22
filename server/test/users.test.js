@@ -1,6 +1,6 @@
 import chai from 'chai';
 import chaiHttp from 'chai-http';
-import mongoose from 'mongoose'
+import mongoose from 'mongoose';
 import server from '../server';
 import userInfo from './userInfo';
 
@@ -12,7 +12,7 @@ let request;
 /**
  * signup endpoint test
  */
- describe('Test signup endpoints', () => {
+describe('Test signup endpoints', () => {
   before(() => {
     request = chai.request(server).keepOpen();
   });
@@ -110,6 +110,6 @@ let request;
     res.body.error.should.have.eql('"password" length must be less than or equal to 50 characters long');
   });
   after(() => {
-    mongoose.connection.collection('users').drop()
+    mongoose.connection.collection('users').drop();
   });
 });

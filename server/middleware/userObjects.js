@@ -1,10 +1,10 @@
 import User from '../models/userModel';
-import db from '../db/index'
+import db from '../db/index';
 
 export default class userObjects {
   static async currentUser(req, res, next) {
     try {
-      const email = req.body.email
+      const { email } = req.body;
       const user = await db.query(User.findOne({ email }));
       if (user) return res.status(409).json({ status: 409, message: 'The user with this email already exist' });
       return next();
@@ -14,17 +14,11 @@ export default class userObjects {
   }
 
   static newUser(hash, req) {
-    // const values = [
-    //   req.body.email,
-    //   req.body.firstName,
-    //   req.body.lastName,
-    //   hash,
-    // ];
     const values = {
       email: req.body.email,
       firstName: req.body.firstName,
       lastName: req.body.lastName,
-      hash: hash,
+      hash,
     };
     return values;
   }

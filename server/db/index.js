@@ -1,19 +1,18 @@
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 
-dotenv.config()
+dotenv.config();
 
-// const url = `mongodb://localhost:27017/${process.env.DATABASE}`
-const url = `mongodb://127.0.0.1:27017/${process.env.DATABASE}`
+const url = `mongodb://localhost:27017/${process.env.DATABASE}`;
 const pool = mongoose.connect(url, {
-  useNewUrlParser: true, 
+  useNewUrlParser: true,
   useUnifiedTopology: true,
-  useCreateIndex: true 
+  useCreateIndex: true,
 });
 // mongoose.connect(url, {
-//   useNewUrlParser: true, 
+//   useNewUrlParser: true,
 //   useUnifiedTopology: true,
-//   useCreateIndex: true 
+//   useCreateIndex: true
 // });
 
 // mongoose.Promise = global.Promise
@@ -32,18 +31,16 @@ const pool = mongoose.connect(url, {
 // export default Schema
 // export { connection }
 
-
-
 export default class Query {
   static async query(queryStrings) {
     let result = '';
-    const client = await pool;
+    await pool;
     try {
       result = await queryStrings;
     } catch (error) {
       console.log(error);
     } finally {
-      console.log('E-COMMERCE APP')
+      console.log('E-COMMERCE APP');
     }
     return result;
   }
