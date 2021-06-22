@@ -3,14 +3,9 @@ node_js:
   - "14.16.0"
 services:
   - mongodb
-  # - redis-server
-# before_install:
-#   - sudo apt-get install -y mongodb-org
+  - redis-server
 before_script:
   - npm install
-  # - sleep 30
-  # - mongo mydb_test --eval 'db.createUser({user:"travis",pwd:"test",roles:["readWrite"]});'
-  # - npm test
 script: 
   - npm test
   - npm run coverage
