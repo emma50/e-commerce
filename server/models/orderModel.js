@@ -1,34 +1,34 @@
-import mongoose from 'mongoose'
-import Schema from '../db'
+import mongoose from 'mongoose';
+import Schema from '../db';
 
 const orderSchema = new Schema({
   userId: {
     type: String,
-    ref: "user"
+    ref: 'user',
   },
   items: [{
     productId: {
       type: String,
-      ref: "item"
+      ref: 'item',
     },
     name: String,
     quantity: {
       type: Number,
       required: true,
-      min: [1, 'Quantity can not be less then 1.']
+      min: [1, 'Quantity can not be less then 1.'],
     },
-    price: Number
+    price: Number,
   }],
   bill: {
     type: Number,
-    required: true
+    required: true,
   },
   date_added: {
     type: Date,
-    default: Date.now
-  }
-})
+    default: Date.now,
+  },
+});
 
 const order = mongoose.model('order', orderSchema);
 
-export default order
+export default order;

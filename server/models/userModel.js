@@ -1,33 +1,34 @@
-import mongoose from 'mongoose'
-import Schema from '../db/index'
+import mongoose from 'mongoose';
+
+const { Schema } = mongoose;
 
 const userSchema = new Schema({
   firstName: {
     type: String,
-    required: true
+    required: true,
   },
   lastName: {
     type: String,
-    required: true
+    required: true,
   },
   email: {
     type: String,
-    required: [true,'Please enter an email'],
+    required: [true, 'Please enter an email'],
     unique: true,
-    lowercase: true
+    lowercase: true,
   },
   hash: {
     type: String,
     required: [true, 'Please enter a valid password'],
-    minlength: [6, 'Minimum password length must be 6 characters']
+    minlength: [6, 'Minimum password length must be 6 characters'],
   },
   register_date: {
     type: Date,
-    default: Date.now
-  }
-})
-  
+    default: Date.now,
+  },
+});
+
 // Model
-const User = mongoose.model("User", userSchema)
+const User = mongoose.model('User', userSchema);
 
 export default User;

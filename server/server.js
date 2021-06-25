@@ -1,13 +1,13 @@
 import express from 'express';
 import 'airbnb-browser-shims';
-import routes from './routes/routes';
 import winston from 'winston';
+import routes from './routes/routes';
 
 const app = express();
 
 routes(app);
 
-process.on('unhandledRejection', (e) => {
+process.on('unhandledRejection', () => {
   console.log('Something went wrong');
 });
 

@@ -1,29 +1,29 @@
-import mongoose from 'mongoose'
-import Schema from '../db'
+import mongoose from 'mongoose';
+import Schema from '../db';
 
 const itemSchema = new Schema({
   title: {
     type: String,
-    required: true
+    required: true,
   },
   description: {
     type: String,
-    required: true
+    required: true,
   },
-  category:{
+  category: {
     type: String,
-    required: true
+    required: true,
   },
   price: {
     type: Number,
-    required: true
+    required: true,
   },
   date_added: {
     type: Date,
-    default: Date.now
+    default: Date.now,
   },
 });
 
 const item = mongoose.model('item', itemSchema);
 
-export default item
+export default item;
