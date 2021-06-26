@@ -109,6 +109,41 @@ describe('Test signup endpoints', () => {
     res.status.should.be.equal(400);
     res.body.error.should.have.eql('"password" length must be less than or equal to 50 characters long');
   });
+
+  // SIGNIN
+  it('Should signin a user', async () => {
+    const res = await request
+      .post('/api/v1/auth/signin')
+      .send(userInfo.signin);
+    res.status.should.be.equal(200);
+    res.body.should.be.a('object');
+    res.body.data.should.have.property('token');
+  });
+  it('should fail if email is omitted', async () => {
+    const res = await request
+      .post('/api/v1/auth/signin/')
+      .send(userInfo.password);
+    res.should.have.status(400);
+  });
+  it('should fail if password is omitted', async () => {
+    const res = await request
+      .post('/api/v1/auth/signin/')
+      .send(userInfo.email);
+    res.should.have.status(400);
+  });
+  it('should fail if Email is invalid', async () => {
+    const res = await request
+      .post('/api/v1/auth/signin/')
+      .send(userInfo.email);
+    res.should.have.status(400);
+  });
+  it('should fail if Password is invalid', async () => {
+    const res = await request
+      .post('/api/v1/auth/signin/')
+      .send(userInfo.invalidPassword);
+    res.should.have.status(400);
+    res.body.should.be.a('object');
+  });
   after(() => {
     mongoose.connection.collection('users').drop();
   });
