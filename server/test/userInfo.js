@@ -77,6 +77,24 @@ const userInfo = {
     lastName: 'Wick',
     password: '1234567890qwertyuio12344567890qweasdzxcvasqwertyuiopasdfghjk',
   },
+  signin: {
+    email: 'emmanuel@yahoo.com',
+    password: 'emma@2020',
+  },
+  password: {
+    password: 'emma@2020',
+  },
+  email: {
+    email: 'emmanuel@yahoo.com',
+  },
+  invalidUser: {
+    email: 'emmanuelyahoo.com',
+    password: 'emma@2020',
+  },
+  invalidPassword: {
+    email: 'emmanuel@yahoo.com',
+    password: 'd',
+  },
 };
 
 export default userInfo;
