@@ -1,7 +1,10 @@
+import dotenv from 'dotenv';
 import authTok from '../helpers/authentication/auth-token';
 import userObjects from '../middleware/userObjects';
 import db from '../db/index';
 import UserModel from '../models/userModel';
+
+dotenv.config();
 
 class userController {
   static async userSignup(req, res) {
@@ -10,6 +13,7 @@ class userController {
 
     try {
       const user = new UserModel(values);
+      if (user.email === process.env.ADMIN) user.isAdmin = true;
       const saveUser = user.save();
       const newUser = await db.query(saveUser);
       const {

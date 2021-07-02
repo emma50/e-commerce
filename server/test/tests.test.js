@@ -3,18 +3,31 @@ import chaiHttp from 'chai-http';
 import mongoose from 'mongoose';
 import server from '../server';
 import userInfo from './userInfo';
+import itemInfo from './itemInfo';
 
 chai.use(chaiHttp);
 chai.should();
 
 let request;
+let adminToken;
+let userToken;
 
 /**
- * signup endpoint test
+ * signup & signin endpoint test
  */
-describe('Test signup endpoints', () => {
+describe('Test signup & signin endpoints', () => {
   before(() => {
     request = chai.request(server).keepOpen();
+  });
+  it('Should signup an admin', async () => {
+    const res = await request
+      .post('/api/v1/auth/signup/')
+      .send(userInfo.adminSignup);
+    res.status.should.be.equal(201);
+    res.body.data.firstName.should.be.equal('Admin');
+    res.body.data.lastName.should.be.equal('Owner');
+    res.body.data.email.should.be.equal('admin@ecommerce.com');
+    adminToken = res.body.data.token;
   });
   it('Should signup a user', async () => {
     const res = await request
@@ -118,6 +131,7 @@ describe('Test signup endpoints', () => {
     res.status.should.be.equal(200);
     res.body.should.be.a('object');
     res.body.data.should.have.property('token');
+    userToken = res.body.data.token;
   });
   it('should fail if email is omitted', async () => {
     const res = await request
@@ -144,7 +158,80 @@ describe('Test signup endpoints', () => {
     res.should.have.status(400);
     res.body.should.be.a('object');
   });
+});
+
+/**
+ * Test endpoint
+ */
+describe('Test item endpoints Admin', () => {
+  it('Should deny access without token', async () => {
+    const res = await chai.request(server)
+      .post('/api/v1/items')
+      .set('x-auth-token', '')
+      .send(itemInfo.newItem);
+    res.status.should.be.equal(401);
+    res.body.should.be.a('object');
+  });
+  it('should create an item', async () => {
+    const res = await chai.request(server)
+      .post('/api/v1/items/')
+      .set('x-auth-token', adminToken)
+      .send(itemInfo.newItem);
+    res.status.should.be.equal(201);
+  });
+  it('Should fail if title is omitted', async () => {
+    const res = await chai.request(server)
+      .post('/api/v1/items')
+      .set('x-auth-token', adminToken)
+      .send(itemInfo.omitTitle);
+    res.status.should.be.equal(400);
+    res.body.error.should.have.eql('"title" is required');
+  });
+  it('Should fail if description is omitted', async () => {
+    const res = await chai.request(server)
+      .post('/api/v1/items')
+      .set('x-auth-token', adminToken)
+      .send(itemInfo.omitDescription);
+    res.status.should.be.equal(400);
+    res.body.error.should.have.eql('"description" is required');
+  });
+  it('Should fail if category is omitted', async () => {
+    const res = await chai.request(server)
+      .post('/api/v1/items')
+      .set('x-auth-token', adminToken)
+      .send(itemInfo.omitCategory);
+    res.status.should.be.equal(400);
+    res.body.error.should.have.eql('"category" is required');
+  });
+  it('Should fail if price is omitted', async () => {
+    const res = await chai.request(server)
+      .post('/api/v1/items')
+      .set('x-auth-token', adminToken)
+      .send(itemInfo.omitPrice);
+    res.status.should.be.equal(400);
+    res.body.error.should.have.eql('"price" is required');
+  });
+});
+
+describe('Test item endpoints User', () => {
+  it('Should not allow user to create an item', async () => {
+    const res = await chai.request(server)
+      .post('/api/v1/items')
+      .set('x-auth-token', userToken)
+      .send(itemInfo.newItem);
+    res.status.should.be.equal(401);
+    res.body.should.be.a('object');
+  });
+  it('Should deny access without token', async () => {
+    const res = await chai.request(server)
+      .post('/api/v1/items')
+      .set('x-auth-token', '')
+      .send(itemInfo.newItem);
+    res.status.should.be.equal(401);
+    res.body.should.be.a('object');
+  });
   after(() => {
     mongoose.connection.collection('users').drop();
+    mongoose.connection.collection('items').drop();
   });
 });
