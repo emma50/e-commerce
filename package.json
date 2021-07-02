@@ -7,7 +7,7 @@
     "build": "babel server --out-dir dist",
     "start": "node dist/server.js",
     "start:dev": "nodemon --exec babel-node server/server.js",
-    "test": "nyc mocha --timeout 900000000 -r @babel/register server/test/users.test.js server/test/items.test.js --exit",
+    "test": "nyc mocha --timeout 900000000 -r @babel/register server/test/*.test.js --exit",
     "coverage": "nyc report --reporter=text-lcov | coveralls",
     "coveralls": "nyc --reporter=lcov --reporter=text-lcov npm test"
   },
