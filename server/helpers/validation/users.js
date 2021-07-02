@@ -6,6 +6,7 @@ const validateUser = Joi.object({
   password: Joi.string().min(6).max(50).required(),
   email: Joi.string().min(4).max(50).required()
     .email(),
+  isAdmin: Joi.boolean(),
 });
 
 export default validateUser;

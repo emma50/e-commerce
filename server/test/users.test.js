@@ -1,6 +1,6 @@
 import chai from 'chai';
 import chaiHttp from 'chai-http';
-import mongoose from 'mongoose';
+// import mongoose from 'mongoose';
 import server from '../server';
 import userInfo from './userInfo';
 
@@ -10,11 +10,20 @@ chai.should();
 let request;
 
 /**
- * signup endpoint test
+ * signup & signin endpoint test
  */
-describe('Test signup endpoints', () => {
+describe('Test signup & signin endpoints', () => {
   before(() => {
     request = chai.request(server).keepOpen();
+  });
+  it('Should signup an admin', async () => {
+    const res = await request
+      .post('/api/v1/auth/signup/')
+      .send(userInfo.adminSignup);
+    res.status.should.be.equal(201);
+    res.body.data.firstName.should.be.equal('Admin');
+    res.body.data.lastName.should.be.equal('Owner');
+    res.body.data.email.should.be.equal('admin@ecommerce.com');
   });
   it('Should signup a user', async () => {
     const res = await request
@@ -144,7 +153,7 @@ describe('Test signup endpoints', () => {
     res.should.have.status(400);
     res.body.should.be.a('object');
   });
-  after(() => {
-    mongoose.connection.collection('users').drop();
-  });
+  // after(() => {
+  //   mongoose.connection.collection('users').drop();
+  // });
 });

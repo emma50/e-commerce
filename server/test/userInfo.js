@@ -1,4 +1,11 @@
 const userInfo = {
+  adminSignup: {
+    firstName: 'Admin',
+    lastName: 'Owner',
+    password: 'admin2312',
+    email: 'admin@ecommerce.com',
+    isAdmin: true,
+  },
   signup: {
     email: 'emmanuel@yahoo.com',
     firstName: 'John',
@@ -76,6 +83,10 @@ const userInfo = {
     firstName: 'John',
     lastName: 'Wick',
     password: '1234567890qwertyuio12344567890qweasdzxcvasqwertyuiopasdfghjk',
+  },
+  adminSignin: {
+    email: 'admin@ecommerce.com',
+    password: 'admin2312',
   },
   signin: {
     email: 'emmanuel@yahoo.com',
