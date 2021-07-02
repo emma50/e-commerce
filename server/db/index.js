@@ -9,27 +9,6 @@ const pool = mongoose.connect(url, {
   useUnifiedTopology: true,
   useCreateIndex: true,
 });
-// mongoose.connect(url, {
-//   useNewUrlParser: true,
-//   useUnifiedTopology: true,
-//   useCreateIndex: true
-// });
-
-// mongoose.Promise = global.Promise
-
-// const Schema = mongoose.Schema
-// const connection = mongoose.connection
-
-// connection.once('open', _ => {
-//   console.log('Database connected:', url)
-// })
-
-// connection.on('error', err => {
-//   console.error('connection error:', err)
-// })
-
-// export default Schema
-// export { connection }
 
 export default class Query {
   static async query(queryStrings) {
@@ -39,8 +18,6 @@ export default class Query {
       result = await queryStrings;
     } catch (error) {
       console.log(error);
-    } finally {
-      console.log('E-COMMERCE APP');
     }
     return result;
   }
