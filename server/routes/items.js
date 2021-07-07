@@ -11,11 +11,11 @@ const router = express.Router();
 
 const { verifyToken } = auth;
 const {
-  // allItems,
+  allItems,
   createItems,
 } = itemController;
 
-// router.get('', verifyToken, allItems);
+router.get('', allItems);
 router.post('',
   verifyToken,
   isAdminCheck,

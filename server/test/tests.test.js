@@ -161,7 +161,7 @@ describe('Test signup & signin endpoints', () => {
 });
 
 /**
- * Test endpoint
+ * Item endpoint
  */
 describe('Test item endpoints Admin', () => {
   it('Should deny access without token', async () => {
@@ -211,6 +211,12 @@ describe('Test item endpoints Admin', () => {
     res.status.should.be.equal(400);
     res.body.error.should.have.eql('"price" is required');
   });
+  it('Should view all items', async () => {
+    const res = await chai.request(server)
+      .get('/api/v1/items');
+    res.status.should.be.equal(200);
+    res.body.should.be.a('object');
+  });
 });
 
 describe('Test item endpoints User', () => {
@@ -228,6 +234,12 @@ describe('Test item endpoints User', () => {
       .set('x-auth-token', '')
       .send(itemInfo.newItem);
     res.status.should.be.equal(401);
+    res.body.should.be.a('object');
+  });
+  it('Should view all items', async () => {
+    const res = await chai.request(server)
+      .get('/api/v1/items');
+    res.status.should.be.equal(200);
     res.body.should.be.a('object');
   });
   after(() => {
