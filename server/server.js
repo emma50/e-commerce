@@ -1,7 +1,7 @@
 import express from 'express';
 import 'airbnb-browser-shims';
-import winston from 'winston';
 import routes from './routes/routes';
+import winston from './config/winston';
 
 const app = express();
 
