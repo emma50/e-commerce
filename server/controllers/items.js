@@ -49,6 +49,21 @@ class itemController {
       if (itemId !== item.id) return res.status(400).json({ status: 400, message: 'The Item ID is invalid' });
       return res.status(200).json({
         status: 200,
+        message: 'You successfully updated an item',
+        data: item,
+      });
+    } catch (error) { return res.status(500).json({ message: error }); }
+  }
+
+  static async deleteItem(req, res) {
+    const itemId = req.params.itemid;
+
+    try {
+      const item = await db.query(ItemModel.findByIdAndDelete({ _id: itemId }));
+      if (itemId !== item.id) return res.status(400).json({ status: 400, message: 'The Item ID is invalid' });
+      return res.status(200).json({
+        status: 200,
+        message: `You successfully deleted the item with the ID: ${item.id}`,
         data: item,
       });
     } catch (error) { return res.status(500).json({ message: error }); }

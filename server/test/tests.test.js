@@ -219,12 +219,56 @@ describe('Test item endpoints Admin', () => {
     res.status.should.be.equal(200);
     res.body.should.be.a('object');
   });
+  it('Should fail to update an item if token is missing', async () => {
+    const res = await chai.request(server)
+      .patch(`/api/v1/items/${itemId}`)
+      .set('x-auth-token', '')
+      .send(itemInfo.updateItem);
+    res.status.should.be.equal(401);
+    res.body.should.be.a('object');
+  });
+  it('Should fail to update an item if the ID is invalid', async () => {
+    const res = await chai.request(server)
+      .patch('/api/v1/items/60e76917878776d19')
+      .set('x-auth-token', adminToken)
+      .send(itemInfo.updateItem);
+    res.status.should.be.equal(400);
+    res.body.should.be.a('object');
+  });
   it('Should update an item', async () => {
     const res = await chai.request(server)
       .patch(`/api/v1/items/${itemId}`)
       .set('x-auth-token', adminToken)
       .send(itemInfo.updateItem);
     res.status.should.be.equal(200);
+  });
+  it('Should fail to delete item if token is missing ', async () => {
+    const res = await chai.request(server)
+      .delete(`/api/v1/items/${itemId}`)
+      .set('x-auth-token', '');
+    res.status.should.be.equal(401);
+    res.body.should.be.a('object');
+  });
+  it('Should fail to delete item if token is invalid', async () => {
+    const res = await chai.request(server)
+      .delete(`/api/v1/items/${itemId}`)
+      .set('x-auth-token', '5e234d94dbb89024f04a2507');
+    res.status.should.be.equal(401);
+    res.body.should.be.a('object');
+  });
+  it('Should fail to delete item if ID is invalid', async () => {
+    const res = await chai.request(server)
+      .delete('/api/v1/items/60e7628806d19')
+      .set('x-auth-token', adminToken);
+    res.status.should.be.equal(400);
+    res.body.should.be.a('object');
+  });
+  it('Should delete an item if is admin', async () => {
+    const res = await chai.request(server)
+      .delete(`/api/v1/items/${itemId}`)
+      .set('x-auth-token', adminToken);
+    res.status.should.be.equal(200);
+    res.body.should.be.a('object');
   });
 });
 
@@ -251,11 +295,18 @@ describe('Test item endpoints User', () => {
     res.status.should.be.equal(200);
     res.body.should.be.a('object');
   });
-  it('Should fail to update an item', async () => {
+  it('Should fail to update an item if is not admin', async () => {
     const res = await chai.request(server)
       .patch(`/api/v1/items/${itemId}`)
       .set('x-auth-token', userToken)
       .send(itemInfo.updateItem);
+    res.status.should.be.equal(401);
+    res.body.should.be.a('object');
+  });
+  it('Should fail to delete an item if is not admin', async () => {
+    const res = await chai.request(server)
+      .delete(`/api/v1/items/${itemId}`)
+      .set('x-auth-token', userToken);
     res.status.should.be.equal(401);
     res.body.should.be.a('object');
   });
