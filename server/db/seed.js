@@ -1,33 +1,26 @@
-import db from './index';
-import User from '../models/userModel';
-
-const seed = {
+const userSeed = [{
   firstName: 'Admin',
   lastName: 'Owner',
-  hash: 'admin2312',
-  isAdmin: true,
+  password: 'admin2312',
   email: 'admin@ecommerce.com',
-};
+}, {
+  firstName: 'Emma',
+  lastName: 'Nuel',
+  password: '12345678',
+  email: '1234@yahoo.com',
+}];
 
-// const seed = {
-//   "firstName": "Admin",
-//   "lastName": "Owner",
-//   "password": "admin2312",
-//   "isAdmin": true,
-//   "email": "admin@ecommerce.com",
-// };
+const itemSeed = [{
+  title: 'Handbag',
+  description: 'The best',
+  category: 'Bag',
+  price: 500,
+},
+{
+  title: 'Schoolbag',
+  description: 'The best school bag',
+  category: 'Bag',
+  price: 50,
+}];
 
-const seedTables = async () => {
-  try {
-    const seeded = await db.query(User.create(seed));
-    console.log(seeded);
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-module.exports = {
-  seedTables,
-};
-
-require('make-runnable');
+export { userSeed, itemSeed };

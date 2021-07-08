@@ -25,6 +25,10 @@ const itemInfo = {
     description: 'Flashy pink handbag',
     category: 'Bag',
   },
+  updateItem: {
+    title: 'Businessbag',
+    description: 'The best business bag',
+  },
 };
 
 export default itemInfo;

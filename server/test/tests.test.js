@@ -11,6 +11,7 @@ chai.should();
 let request;
 let adminToken;
 let userToken;
+let itemId;
 
 /**
  * signup & signin endpoint test
@@ -178,6 +179,7 @@ describe('Test item endpoints Admin', () => {
       .set('x-auth-token', adminToken)
       .send(itemInfo.newItem);
     res.status.should.be.equal(201);
+    itemId = res.body.data.id;
   });
   it('Should fail if title is omitted', async () => {
     const res = await chai.request(server)
@@ -217,6 +219,13 @@ describe('Test item endpoints Admin', () => {
     res.status.should.be.equal(200);
     res.body.should.be.a('object');
   });
+  it('Should update an item', async () => {
+    const res = await chai.request(server)
+      .patch(`/api/v1/items/${itemId}`)
+      .set('x-auth-token', adminToken)
+      .send(itemInfo.updateItem);
+    res.status.should.be.equal(200);
+  });
 });
 
 describe('Test item endpoints User', () => {
@@ -240,6 +249,14 @@ describe('Test item endpoints User', () => {
     const res = await chai.request(server)
       .get('/api/v1/items');
     res.status.should.be.equal(200);
+    res.body.should.be.a('object');
+  });
+  it('Should fail to update an item', async () => {
+    const res = await chai.request(server)
+      .patch(`/api/v1/items/${itemId}`)
+      .set('x-auth-token', userToken)
+      .send(itemInfo.updateItem);
+    res.status.should.be.equal(401);
     res.body.should.be.a('object');
   });
   after(() => {
