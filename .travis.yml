@@ -4,14 +4,18 @@ node_js:
 services:
   - mongodb
   - redis-server
+env:
+  global:
+    - CC_TEST_REPORTER_ID=67c4d7725c56e18a5a70f725087810549a1b5402cc0b1c5bb1f3476ae98f8d25
 before_script:
   - npm install
+  - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+  - chmod +x ./cc-test-reporter
+  - ./cc-test-reporter before-build
 script: 
-  - npm test
   - npm run coveralls
   - npm run coverage
-# after_script:
-#   - npm run coverage
-#   - npm run coveralls
+after_script:
+  - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
 notifications:
   email: true
