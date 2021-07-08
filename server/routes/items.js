@@ -15,6 +15,7 @@ const {
   allItems,
   createItems,
   updateItem,
+  deleteItem,
 } = itemController;
 
 router.get('', allItems);
@@ -25,5 +26,6 @@ router.post('',
   itemObjects.currentItem,
   createItems);
 router.patch('/:itemid', verifyToken, isAdminCheck, allValidator(validateUpdatedItem), updateItem);
+router.delete('/:itemid', verifyToken, isAdminCheck, deleteItem);
 
 export default router;
