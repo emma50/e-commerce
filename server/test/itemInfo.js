@@ -5,6 +5,12 @@ const itemInfo = {
     category: 'Bag',
     price: 20,
   },
+  newItem2: {
+    title: 'Schoolbag',
+    description: 'The best school bag',
+    category: 'Bag',
+    price: 8,
+  },
   omitTitle: {
     description: 'Flashy pink handbag',
     category: 'Bag',

@@ -4,14 +4,22 @@ import routes from './routes/routes';
 import winston from './config/winston';
 
 const app = express();
+let envPort;
 
 routes(app);
 
-process.on('unhandledRejection', () => {
-  console.log('Something went wrong');
+if (process.env.NODE_ENV === 'test') {
+  envPort = 3001;
+} else {
+  envPort = 3000;
+}
+
+process.on('unhandledRejection', (e) => {
+  console.log(e);
 });
 
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || envPort;
+
 winston.info(`Server Running on port ${port}`);
 const server = app.listen(port);
 

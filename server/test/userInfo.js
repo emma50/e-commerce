@@ -18,6 +18,12 @@ const userInfo = {
     lastName: 'Wick',
     password: 'emma@2020',
   },
+  emailNotString: {
+    email: 2,
+    firstName: 'John',
+    lastName: 'Wick',
+    password: 'emma@2020',
+  },
   invalidEmail: {
     email: 'emmanuel:yahoo.com',
     firstName: 'John',
@@ -35,6 +41,12 @@ const userInfo = {
     firstName: '',
     lastName: 'Wick',
     password: 'emma@2019',
+  },
+  invalidFirstName: {
+    email: 'emmanuel@yahoo.com',
+    firstName: 2,
+    lastName: 'Wick',
+    password: 'emma@2020',
   },
   lowFirstNameLength: {
     email: 'emmanuel@yahoo.com',
@@ -54,6 +66,12 @@ const userInfo = {
     lastName: '',
     password: 'emma@2020',
   },
+  invalidLastName: {
+    email: 'emmanuel@yahoo.com',
+    firstName: 'John',
+    lastName: 2,
+    password: 'emma@2020',
+  },
   lowLastNameLength: {
     email: 'emmanuel@yahoo.com',
     firstName: 'John',
@@ -71,6 +89,12 @@ const userInfo = {
     firstName: 'John',
     lastName: 'Wick',
     password: '',
+  },
+  passwordNotString: {
+    email: 'emmanuel@yahoo.com',
+    firstName: 'John',
+    lastName: 'Wick',
+    password: 2,
   },
   lowPasswordLength: {
     email: 'emmanuel@yahoo.com',

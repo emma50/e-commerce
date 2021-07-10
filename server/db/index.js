@@ -3,13 +3,37 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-const url = `mongodb://localhost:27017/${process.env.DATABASE}`;
-const pool = mongoose.connect(url, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-  useCreateIndex: true,
-  useFindAndModify: false,
-});
+let url;
+let pool;
+process.env.NODE_ENV = process.env.NODE_ENV || 'development';
+
+if (process.env.NODE_ENV === 'test') {
+  url = `mongodb://localhost:27017/${process.env.TEST_DATABASE}`;
+  pool = mongoose.connect(url, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useCreateIndex: true,
+    useFindAndModify: false,
+  });
+} else if (process.env.NODE_ENV === 'development') {
+  url = `mongodb://localhost:27017/${process.env.DATABASE}`;
+  pool = mongoose.connect(url, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useCreateIndex: true,
+    useFindAndModify: false,
+  });
+}
+
+console.log(process.env.NODE_ENV, 'environment');
+
+// const url = `mongodb://localhost:27017/${process.env.DATABASE}`;
+// const pool = mongoose.connect(url, {
+//   useNewUrlParser: true,
+//   useUnifiedTopology: true,
+//   useCreateIndex: true,
+//   useFindAndModify: false,
+// });
 
 export default class Query {
   static async query(queryStrings) {
