@@ -4,6 +4,7 @@ import mongoose from 'mongoose';
 import server from '../server';
 import userInfo from './userInfo';
 import itemInfo from './itemInfo';
+import cartInfo from './cartInfo';
 
 chai.use(chaiHttp);
 chai.should();
@@ -12,6 +13,7 @@ let request;
 let adminToken;
 let userToken;
 let itemId;
+let itemId2;
 
 /**
  * signup & signin endpoint test
@@ -28,7 +30,7 @@ describe('Test signup & signin endpoints', () => {
     res.body.data.firstName.should.be.equal('Admin');
     res.body.data.lastName.should.be.equal('Owner');
     res.body.data.email.should.be.equal('admin@ecommerce.com');
-    adminToken = res.body.data.token;
+    // adminToken = res.body.data.token;
   });
   it('Should signup a user', async () => {
     const res = await request
@@ -45,6 +47,13 @@ describe('Test signup & signin endpoints', () => {
       .send(userInfo.signupEmailOmitted);
     res.status.should.be.equal(400);
     res.body.error.should.have.eql('"email" is not allowed to be empty');
+  });
+  it('Should fail if email is not string', async () => {
+    const res = await request
+      .post('/api/v1/auth/signup/')
+      .send(userInfo.emailNotString);
+    res.status.should.be.equal(400);
+    res.body.error.should.have.eql('"email" must be a string');
   });
   it('Should fail if email is invalid', async () => {
     const res = await request
@@ -67,6 +76,13 @@ describe('Test signup & signin endpoints', () => {
     res.status.should.be.equal(400);
     res.body.error.should.have.eql('"firstName" is not allowed to be empty');
   });
+  it('Should fail if firstName is not string', async () => {
+    const res = await request
+      .post('/api/v1/auth/signup/')
+      .send(userInfo.invalidFirstName);
+    res.status.should.be.equal(400);
+    res.body.error.should.have.eql('"firstName" must be a string');
+  });
   it('Should fail if firstName length is less than 2 characters', async () => {
     const res = await request
       .post('/api/v1/auth/signup/')
@@ -87,6 +103,13 @@ describe('Test signup & signin endpoints', () => {
       .send(userInfo.omittedLastName);
     res.status.should.be.equal(400);
     res.body.error.should.have.eql('"lastName" is not allowed to be empty');
+  });
+  it('Should fail if lastName is not string', async () => {
+    const res = await request
+      .post('/api/v1/auth/signup/')
+      .send(userInfo.invalidLastName);
+    res.status.should.be.equal(400);
+    res.body.error.should.have.eql('"lastName" must be a string');
   });
   it('Should fail if lastName length is less than 2 characters', async () => {
     const res = await request
@@ -109,6 +132,13 @@ describe('Test signup & signin endpoints', () => {
     res.status.should.be.equal(400);
     res.body.error.should.have.eql('"password" is not allowed to be empty');
   });
+  it('Should fail if password is not string', async () => {
+    const res = await request
+      .post('/api/v1/auth/signup/')
+      .send(userInfo.passwordNotString);
+    res.status.should.be.equal(400);
+    res.body.error.should.have.eql('"password" must be a string');
+  });
   it('Should fail if password length is less than 6 characters', async () => {
     const res = await request
       .post('/api/v1/auth/signup/')
@@ -125,6 +155,15 @@ describe('Test signup & signin endpoints', () => {
   });
 
   // SIGNIN
+  it('Should signin an admin', async () => {
+    const res = await request
+      .post('/api/v1/auth/signin')
+      .send(userInfo.adminSignin);
+    res.status.should.be.equal(200);
+    res.body.should.be.a('object');
+    res.body.data.should.have.property('token');
+    adminToken = res.body.data.token;
+  });
   it('Should signin a user', async () => {
     const res = await request
       .post('/api/v1/auth/signin')
@@ -308,6 +347,94 @@ describe('Test item endpoints User', () => {
       .delete(`/api/v1/items/${itemId}`)
       .set('x-auth-token', userToken);
     res.status.should.be.equal(401);
+    res.body.should.be.a('object');
+  });
+});
+
+describe('Test cart endpoint Admin', () => {
+  it('Should fail to create a cart', async () => {
+    const res = await chai.request(server)
+      .post(`/api/v1/cart/${itemId}`)
+      .set('x-auth-token', adminToken)
+      .send(cartInfo.quantity);
+    res.status.should.be.equal(401);
+    res.body.should.be.a('object');
+  });
+});
+
+describe('Test cart endpoint User', () => {
+  it('should create an item', async () => {
+    const res = await chai.request(server)
+      .post('/api/v1/items/')
+      .set('x-auth-token', adminToken)
+      .send(itemInfo.newItem2);
+    res.status.should.be.equal(201);
+    itemId2 = res.body.data.id;
+  });
+  it('Should fail if token is missing', async () => {
+    const res = await chai.request(server)
+      .post(`/api/v1/cart/${itemId}`)
+      .set('x-auth-token', '')
+      .send(cartInfo.newCart);
+    res.status.should.be.equal(401);
+    res.body.should.be.a('object');
+  });
+  it('Should fail if token is invalid', async () => {
+    const res = await chai.request(server)
+      .post(`/api/v1/cart/${itemId}`)
+      .set('x-auth-token', '123wewe')
+      .send(cartInfo.quantity);
+    res.status.should.be.equal(401);
+    res.body.should.be.a('object');
+  });
+  it('Should fail if quantity is invalid', async () => {
+    const res = await chai.request(server)
+      .post(`/api/v1/cart/${itemId}`)
+      .set('x-auth-token', '123wewe')
+      .send(cartInfo.quantity);
+    res.status.should.be.equal(401);
+    res.body.should.be.a('object');
+  });
+  it('Should fail if quantity is not a number or ommitted', async () => {
+    const res = await chai.request(server)
+      .post(`/api/v1/cart/${itemId}`)
+      .set('x-auth-token', userToken)
+      .send(cartInfo.quantityNotNumber);
+    res.status.should.be.equal(400);
+    res.body.should.be.a('object');
+    res.body.error.should.have.eql('"quantity" must be a number');
+  });
+  it('Should fail if quantity is more than 1000000', async () => {
+    const res = await chai.request(server)
+      .post(`/api/v1/cart/${itemId}`)
+      .set('x-auth-token', userToken)
+      .send(cartInfo.invalidQuantity);
+    res.status.should.be.equal(400);
+    res.body.should.be.a('object');
+    res.body.error.should.have.eql('"quantity" must be less than or equal to 1000000');
+  });
+  it('Should fail if item ID is invalid', async () => {
+    const res = await chai.request(server)
+      .post('/api/v1/cart/1')
+      .set('x-auth-token', userToken)
+      .send(cartInfo.quantity);
+    res.status.should.be.equal(404);
+    res.body.should.be.a('object');
+  });
+  it('Should create a cart', async () => {
+    const res = await chai.request(server)
+      .post(`/api/v1/cart/${itemId2}`)
+      .set('x-auth-token', userToken)
+      .send(cartInfo.quantity);
+    res.status.should.be.equal(201);
+    res.body.should.be.a('object');
+  });
+  it('Should add to a created cart', async () => {
+    const res = await chai.request(server)
+      .post(`/api/v1/cart/${itemId2}`)
+      .set('x-auth-token', userToken)
+      .send(cartInfo.quantity);
+    res.status.should.be.equal(200);
     res.body.should.be.a('object');
   });
   after(() => {

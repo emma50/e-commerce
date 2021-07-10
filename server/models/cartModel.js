@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
-import Schema from '../db';
+
+const { Schema } = mongoose;
 
 const cartSchema = new Schema({
   userId: {
@@ -26,6 +27,7 @@ const cartSchema = new Schema({
     default: 0,
   },
 });
-const cart = mongoose.model('cart', cartSchema);
 
-export default cart;
+const Cart = mongoose.model('Cart', cartSchema);
+
+export default Cart;
