@@ -52,6 +52,28 @@ class cartController {
       });
     } catch (error) { return res.status(500).json({ message: error }); }
   }
+
+  static async getItemFromCart(req, res) {
+    const { id, firstName } = req.user;
+    // const userId = req.params.userid;
+
+    if (req.user.isAdmin === true) return res.status(401).json({ status: 401, message: 'You cannot get Item from cart as an Admin' });
+    try {
+      const cart = await db.query(CartModel.findOne({ userId: id }));
+      if (cart && cart.items.length > 0) {
+        return res.status(200).json({
+          status: 200,
+          message: `Hi, ${firstName} Here is your cart`,
+          data: cart,
+        });
+      }
+
+      return res.status(200).json({
+        status: 200,
+        message: `Hi, ${firstName} You have no cart`,
+      });
+    } catch (error) { return res.status(500).json({ message: error }); }
+  }
 }
 
 export default cartController;

@@ -10,8 +10,10 @@ const router = express.Router();
 const { verifyToken } = auth;
 const {
   addItemToCart,
+  getItemFromCart,
 } = cartController;
 
 router.post('/:itemid', verifyToken, allValidator(validateQuantity), addItemToCart);
+router.get('', verifyToken, getItemFromCart);
 
 export default router;
