@@ -360,6 +360,13 @@ describe('Test cart endpoint Admin', () => {
     res.status.should.be.equal(401);
     res.body.should.be.a('object');
   });
+  it('Should fail to get cart', async () => {
+    const res = await chai.request(server)
+      .get('/api/v1/cart')
+      .set('x-auth-token', adminToken);
+    res.status.should.be.equal(401);
+    res.body.should.be.a('object');
+  });
 });
 
 describe('Test cart endpoint User', () => {
@@ -435,6 +442,20 @@ describe('Test cart endpoint User', () => {
       .set('x-auth-token', userToken)
       .send(cartInfo.quantity);
     res.status.should.be.equal(200);
+    res.body.should.be.a('object');
+  });
+  it('Should get cart', async () => {
+    const res = await chai.request(server)
+      .get('/api/v1/cart')
+      .set('x-auth-token', userToken);
+    res.status.should.be.equal(200);
+    res.body.should.be.a('object');
+  });
+  it('Should fail to get cart if token is invalid', async () => {
+    const res = await chai.request(server)
+      .get('/api/v1/cart')
+      .set('x-auth-token', '');
+    res.status.should.be.equal(401);
     res.body.should.be.a('object');
   });
   after(() => {
