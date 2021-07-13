@@ -367,6 +367,13 @@ describe('Test cart endpoint Admin', () => {
     res.status.should.be.equal(401);
     res.body.should.be.a('object');
   });
+  it('Should fail to delete item from cart as an admin', async () => {
+    const res = await chai.request(server)
+      .delete(`/api/v1/cart/${itemId}`)
+      .set('x-auth-token', adminToken);
+    res.status.should.be.equal(401);
+    res.body.should.be.a('object');
+  });
 });
 
 describe('Test cart endpoint User', () => {
@@ -456,6 +463,20 @@ describe('Test cart endpoint User', () => {
       .get('/api/v1/cart')
       .set('x-auth-token', '');
     res.status.should.be.equal(401);
+    res.body.should.be.a('object');
+  });
+  it('Should fail to delete item from cart if token is invalid', async () => {
+    const res = await chai.request(server)
+      .delete(`/api/v1/cart/${itemId}`)
+      .set('x-auth-token', '');
+    res.status.should.be.equal(401);
+    res.body.should.be.a('object');
+  });
+  it('Should delete an item from cart', async () => {
+    const res = await chai.request(server)
+      .delete(`/api/v1/cart/${itemId2}`)
+      .set('x-auth-token', userToken);
+    res.status.should.be.equal(200);
     res.body.should.be.a('object');
   });
   after(() => {

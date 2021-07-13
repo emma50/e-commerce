@@ -2,10 +2,10 @@ import ItemModel from '../models/itemModel';
 import CartModel from '../models/cartModel';
 import db from '../db/index';
 
-export default class itemObjects {
-  static async newCart(req) {
+export default class cartObjects {
+  static async newCart(req, itemId) {
     const { id } = req.user;
-    const itemId = req.params.itemid;
+    // const itemId = req.params.itemid;
     const { quantity } = req.body;
 
     const item = await db.query(ItemModel.findById(itemId));
