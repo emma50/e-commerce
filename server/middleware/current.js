@@ -2,10 +2,7 @@ import User from '../models/userModel';
 import Item from '../models/itemModel';
 import db from '../db/index';
 
-async function current(req, res, next) {
-  const { title } = req.body;
-  const { email } = req.body;
-
+async function find(res, email, title, next) {
   try {
     if (email) {
       const user = await db.query(User.findOne({ email }));
@@ -19,6 +16,12 @@ async function current(req, res, next) {
   } catch (error) {
     return next(error);
   }
+}
+
+async function current(req, res, next) {
+  const { title, email } = req.body;
+
+  find(res, email, title, next);
 }
 
 export default current;

@@ -7,22 +7,25 @@ let url;
 let pool;
 process.env.NODE_ENV = process.env.NODE_ENV || 'development';
 
-if (process.env.NODE_ENV === 'test') {
-  url = `mongodb://localhost:27017/${process.env.TEST_DATABASE}`;
-  pool = mongoose.connect(url, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    useCreateIndex: true,
-    useFindAndModify: false,
-  });
-} else if (process.env.NODE_ENV === 'development') {
-  url = `mongodb://localhost:27017/${process.env.DATABASE}`;
-  pool = mongoose.connect(url, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    useCreateIndex: true,
-    useFindAndModify: false,
-  });
+function dbPool() {
+  if (process.env.NODE_ENV === 'test') {
+    url = `mongodb://localhost:27017/${process.env.TEST_DATABASE}`;
+    pool = mongoose.connect(url, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+      useCreateIndex: true,
+      useFindAndModify: false,
+    });
+  } else {
+    url = `mongodb://localhost:27017/${process.env.DATABASE}`;
+    pool = mongoose.connect(url, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+      useCreateIndex: true,
+      useFindAndModify: false,
+    });
+  }
+  return pool;
 }
 
 console.log(process.env.NODE_ENV, 'environment');
@@ -38,7 +41,7 @@ console.log(process.env.NODE_ENV, 'environment');
 export default class Query {
   static async query(queryStrings) {
     let result = '';
-    await pool;
+    await dbPool();
     try {
       result = await queryStrings;
     } catch (error) {

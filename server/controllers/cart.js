@@ -1,4 +1,5 @@
 import cartObjects from '../middleware/cartObjects';
+import state from '../middleware/state';
 import db from '../db/index';
 import ItemModel from '../models/itemModel';
 import CartModel from '../models/cartModel';
@@ -16,12 +17,15 @@ class cartController {
       const { title, price } = item;
       if (!item) return res.status(404).json({ status: 404, message: 'The Item was not found' });
       if (!cart) {
-        const newCart = await db.query(cartObjects.newCart(req));
-        return res.status(201).json({
-          status: 201,
-          message: `Hi, ${firstName} You have successfully created a cart and added ${quantity} item(s) to it`,
-          data: newCart,
-        });
+        const newCart = await db.query(cartObjects.newCart(req, itemId));
+        state(res, 201, `Hi, ${firstName} You have successfully created a cart and added ${quantity} item(s) to it`, newCart);
+
+        // return res.status(201).json({
+        //   status: 201,
+        //   message:`Hi, ${firstName} You have successfully
+        // created a cart and added ${quantity} item(s) to it`,
+        //   data: newCart,
+        // });
       }
 
       const itemIndex = cart.items.findIndex((p) => p.productId === itemId);
@@ -44,7 +48,6 @@ class cartController {
         cart.bill += quantity * price;
         await db.query(cart.save());
       }
-
       return res.status(200).json({
         status: 200,
         message: `Hi, ${firstName} You have successfully added ${quantity} item(s) to cart`,
@@ -61,11 +64,39 @@ class cartController {
     try {
       const cart = await db.query(CartModel.findOne({ userId: id }));
       if (cart && cart.items.length > 0) {
-        return res.status(200).json({
-          status: 200,
-          message: `Hi, ${firstName} Here is your cart`,
-          data: cart,
-        });
+        state(res, 200, `Hi, ${firstName} Here is your cart`, cart);
+        // return res.status(200).json({
+        //   status: 200,
+        //   message: `Hi, ${firstName} Here is your cart`,
+        //   data: cart,
+        // });
+      }
+      return res.status(200).json({
+        status: 200,
+        message: `Hi, ${firstName} You have no cart`,
+      });
+    } catch (error) { return res.status(500).json({ message: error }); }
+  }
+
+  static async deleteItemFromCart(req, res) {
+    const { id, firstName } = req.user;
+    const itemId = req.params.itemid;
+
+    if (req.user.isAdmin === true) return res.status(401).json({ status: 401, message: 'You cannot get Item from cart as an Admin' });
+    try {
+      const cart = await db.query(CartModel.findOne({ userId: id }));
+      if (cart && cart.items.length > 0) {
+        const itemIndex = cart.items.findIndex((p) => p.productId === itemId);
+        const productItem = cart.items[itemIndex];
+        cart.bill -= productItem.quantity * productItem.price;
+        cart.items.splice(itemIndex, 1);
+
+        state(res, 200, `Hi, ${firstName} you have successfully removed an item from your cart`, cart);
+        // return res.status(200).json({
+        //   status: 200,
+        //   message: `Hi, ${firstName} you have successfully removed an item from your cart`,
+        //   data: cart,
+        // });
       }
 
       return res.status(200).json({

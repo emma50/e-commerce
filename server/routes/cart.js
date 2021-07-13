@@ -11,9 +11,11 @@ const { verifyToken } = auth;
 const {
   addItemToCart,
   getItemFromCart,
+  deleteItemFromCart,
 } = cartController;
 
 router.post('/:itemid', verifyToken, allValidator(validateQuantity), addItemToCart);
 router.get('', verifyToken, getItemFromCart);
+router.delete('/:itemid', verifyToken, deleteItemFromCart);
 
 export default router;
