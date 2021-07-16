@@ -9,9 +9,11 @@ const { verifyToken } = auth;
 const {
   checkout,
   verifyPayment,
+  getOrder,
 } = orderController;
 
 router.post('', verifyToken, checkout);
 router.get('/paystack/callback', verifyPayment);
+router.get('', verifyToken, getOrder);
 
 export default router;

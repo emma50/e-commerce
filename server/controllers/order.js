@@ -5,6 +5,26 @@ import OrderModel from '../models/orderModel';
 import CartModel from '../models/cartModel';
 
 class orderController {
+  static async getOrder(req, res) {
+    const { id, firstName } = req.user;
+
+    try {
+      const sortOrder = OrderModel.find({ userId: id }).sort({ date: -1 });
+      const order = await db.query(sortOrder);
+      if (!order) {
+        return res.status(200).json({
+          status: 200,
+          message: `Hi ${firstName} You have no order`,
+        });
+      }
+      return res.status(200).json({
+        status: 200,
+        message: `Hi ${firstName} Here is your Order`,
+        data: order,
+      });
+    } catch (error) { return res.status(500).json({ message: error }); }
+  }
+
   static async checkout(req, res) {
     const {
       id,
