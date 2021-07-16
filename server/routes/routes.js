@@ -6,6 +6,7 @@ import winston from '../config/winston';
 import users from './users';
 import items from './items';
 import cart from './cart';
+import order from './order';
 
 export default (app) => {
   app.use(cors());
@@ -16,4 +17,5 @@ export default (app) => {
   app.use('/api/v1/auth', users);
   app.use('/api/v1/items', items);
   app.use('/api/v1/cart', cart);
+  app.use('/api/v1/order', order);
 };
