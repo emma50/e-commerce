@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
-import Schema from '../db';
+
+const { Schema } = mongoose;
 
 const orderSchema = new Schema({
   userId: {
@@ -16,6 +17,7 @@ const orderSchema = new Schema({
       type: Number,
       required: true,
       min: [1, 'Quantity can not be less then 1.'],
+      default: 1,
     },
     price: Number,
   }],
