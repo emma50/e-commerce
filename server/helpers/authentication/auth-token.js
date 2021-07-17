@@ -7,9 +7,9 @@ dotenv.config();
 
 const client = redis.createClient();
 
-client.on('error', (error) => {
-  console.error(error);
-});
+// client.on('error', (error) => {
+//   console.error(error);
+// });
 
 const authToken = {
   hashPassword(password) {

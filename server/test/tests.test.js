@@ -12,6 +12,7 @@ chai.should();
 let request;
 let adminToken;
 let userToken;
+let userToken2;
 let itemId;
 let itemId2;
 
@@ -40,6 +41,15 @@ describe('Test signup & signin endpoints', () => {
     res.body.data.firstName.should.be.equal('John');
     res.body.data.lastName.should.be.equal('Wick');
     res.body.data.email.should.be.equal('emmanuel@yahoo.com');
+  });
+  it('Should signup a second user', async () => {
+    const res = await request
+      .post('/api/v1/auth/signup/')
+      .send(userInfo.signup2);
+    res.status.should.be.equal(201);
+    res.body.data.firstName.should.be.equal('Emman');
+    res.body.data.lastName.should.be.equal('Nuell');
+    res.body.data.email.should.be.equal('emman@yahoo.com');
   });
   it('Should fail if email is omitted', async () => {
     const res = await request
@@ -172,6 +182,15 @@ describe('Test signup & signin endpoints', () => {
     res.body.should.be.a('object');
     res.body.data.should.have.property('token');
     userToken = res.body.data.token;
+  });
+  it('Should signin a second user', async () => {
+    const res = await request
+      .post('/api/v1/auth/signin')
+      .send(userInfo.signin2);
+    res.status.should.be.equal(200);
+    res.body.should.be.a('object');
+    res.body.data.should.have.property('token');
+    userToken2 = res.body.data.token;
   });
   it('should fail if email is omitted', async () => {
     const res = await request
@@ -477,6 +496,67 @@ describe('Test cart endpoint User', () => {
       .delete(`/api/v1/cart/${itemId2}`)
       .set('x-auth-token', userToken);
     res.status.should.be.equal(200);
+    res.body.should.be.a('object');
+  });
+});
+
+describe('Test order endpoint User', () => {
+  it('should fail to create an order if admin', async () => {
+    const res = await chai.request(server)
+      .post('/api/v1/order/')
+      .set('x-auth-token', adminToken);
+    res.status.should.be.equal(401);
+    res.body.should.be.a('object');
+  });
+  it('should fail to get an order if admin', async () => {
+    const res = await chai.request(server)
+      .get('/api/v1/order/')
+      .set('x-auth-token', adminToken);
+    res.status.should.be.equal(401);
+    res.body.should.be.a('object');
+  });
+});
+
+describe('Test order endpoint User', () => {
+  it('should fail to create an order', async () => {
+    const res = await chai.request(server)
+      .post('/api/v1/order/')
+      .set('x-auth-token', userToken2);
+    res.status.should.be.equal(404);
+    res.body.should.be.a('object');
+  });
+  it('should fail to create an order if token is missing', async () => {
+    const res = await chai.request(server)
+      .post('/api/v1/order/')
+      .set('x-auth-token', '');
+    res.status.should.be.equal(401);
+    res.body.should.be.a('object');
+  });
+  it('should fail to create an order if token is admin taken', async () => {
+    const res = await chai.request(server)
+      .post('/api/v1/order/')
+      .set('x-auth-token', adminToken);
+    res.status.should.be.equal(401);
+    res.body.should.be.a('object');
+  });
+  it('should create an order', async () => {
+    const res = await chai.request(server)
+      .post('/api/v1/order/')
+      .set('x-auth-token', userToken);
+    res.status.should.be.equal(200);
+  });
+  it('should get an order', async () => {
+    const res = await chai.request(server)
+      .post('/api/v1/order/')
+      .set('x-auth-token', userToken);
+    res.status.should.be.equal(200);
+    res.body.should.be.a('object');
+  });
+  it('should fail to get an order if no order was created by you', async () => {
+    const res = await chai.request(server)
+      .get('/api/v1/order/')
+      .set('x-auth-token', userToken2);
+    res.status.should.be.equal(404);
     res.body.should.be.a('object');
   });
   after(() => {
