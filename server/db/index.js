@@ -30,14 +30,6 @@ function dbPool() {
 
 console.log(process.env.NODE_ENV, 'environment');
 
-// const url = `mongodb://localhost:27017/${process.env.DATABASE}`;
-// const pool = mongoose.connect(url, {
-//   useNewUrlParser: true,
-//   useUnifiedTopology: true,
-//   useCreateIndex: true,
-//   useFindAndModify: false,
-// });
-
 export default class Query {
   static async query(queryStrings) {
     let result = '';

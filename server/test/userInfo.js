@@ -130,6 +130,16 @@ const userInfo = {
     email: 'emmanuel@yahoo.com',
     password: 'd',
   },
+  signup2: {
+    firstName: 'Emman',
+    lastName: 'Nuell',
+    email: 'emman@yahoo.com',
+    password: '123456789',
+  },
+  signin2: {
+    email: 'emman@yahoo.com',
+    password: '123456789',
+  },
 };
 
 export default userInfo;

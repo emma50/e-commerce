@@ -6,11 +6,11 @@ import CartModel from '../models/cartModel';
 
 class cartController {
   static async addItemToCart(req, res) {
-    const { id, firstName } = req.user;
+    const { id, firstName, isAdmin } = req.user;
     const itemId = req.params.itemid;
     const { quantity } = req.body;
 
-    if (req.user.isAdmin === true) return res.status(401).json({ status: 401, message: 'You cannot add Item to cart as an Admin' });
+    if (isAdmin === true) return res.status(401).json({ status: 401, message: 'You cannot add Item to cart as an Admin' });
     try {
       const cart = await db.query(CartModel.findOne({ userId: id }));
       const item = await db.query(ItemModel.findById(itemId));
@@ -19,13 +19,6 @@ class cartController {
       if (!cart) {
         const newCart = await db.query(cartObjects.newCart(req, itemId));
         state(res, 201, `Hi, ${firstName} You have successfully created a cart and added ${quantity} item(s) to it`, newCart);
-
-        // return res.status(201).json({
-        //   status: 201,
-        //   message:`Hi, ${firstName} You have successfully
-        // created a cart and added ${quantity} item(s) to it`,
-        //   data: newCart,
-        // });
       }
 
       const itemIndex = cart.items.findIndex((p) => p.productId === itemId);
@@ -57,19 +50,13 @@ class cartController {
   }
 
   static async getItemFromCart(req, res) {
-    const { id, firstName } = req.user;
-    // const userId = req.params.userid;
+    const { id, firstName, isAdmin } = req.user;
 
-    if (req.user.isAdmin === true) return res.status(401).json({ status: 401, message: 'You cannot get Item from cart as an Admin' });
+    if (isAdmin === true) return res.status(401).json({ status: 401, message: 'You cannot get Item from cart as an Admin' });
     try {
       const cart = await db.query(CartModel.findOne({ userId: id }));
       if (cart && cart.items.length > 0) {
         state(res, 200, `Hi, ${firstName} Here is your cart`, cart);
-        // return res.status(200).json({
-        //   status: 200,
-        //   message: `Hi, ${firstName} Here is your cart`,
-        //   data: cart,
-        // });
       }
       return res.status(200).json({
         status: 200,
@@ -79,10 +66,10 @@ class cartController {
   }
 
   static async deleteItemFromCart(req, res) {
-    const { id, firstName } = req.user;
+    const { id, firstName, isAdmin } = req.user;
     const itemId = req.params.itemid;
 
-    if (req.user.isAdmin === true) return res.status(401).json({ status: 401, message: 'You cannot get Item from cart as an Admin' });
+    if (isAdmin === true) return res.status(401).json({ status: 401, message: 'You cannot get Item from cart as an Admin' });
     try {
       const cart = await db.query(CartModel.findOne({ userId: id }));
       if (cart && cart.items.length > 0) {
@@ -92,11 +79,6 @@ class cartController {
         cart.items.splice(itemIndex, 1);
 
         state(res, 200, `Hi, ${firstName} you have successfully removed an item from your cart`, cart);
-        // return res.status(200).json({
-        //   status: 200,
-        //   message: `Hi, ${firstName} you have successfully removed an item from your cart`,
-        //   data: cart,
-        // });
       }
 
       return res.status(200).json({

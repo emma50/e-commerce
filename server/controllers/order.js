@@ -6,14 +6,15 @@ import CartModel from '../models/cartModel';
 
 class orderController {
   static async getOrder(req, res) {
-    const { id, firstName } = req.user;
+    const { id, firstName, isAdmin } = req.user;
 
+    if (isAdmin === true) return res.status(401).json({ status: 401, message: 'You cannot get an order as an Admin' });
     try {
       const sortOrder = OrderModel.find({ userId: id }).sort({ date: -1 });
       const order = await db.query(sortOrder);
-      if (!order) {
-        return res.status(200).json({
-          status: 200,
+      if (!order.length) {
+        return res.status(404).json({
+          status: 404,
           message: `Hi ${firstName} You have no order`,
         });
       }
@@ -31,8 +32,10 @@ class orderController {
       firstName,
       lastName,
       email,
+      isAdmin,
     } = req.user;
 
+    if (isAdmin === true) return res.status(401).json({ status: 401, message: 'You cannot create checkout as an Admin' });
     try {
       const cart = await db.query(CartModel.findOne({ userId: id }));
 
@@ -53,9 +56,11 @@ class orderController {
             message: `Unable to accept payment for ${firstName}`,
           });
         }
+        console.log(payment);
         const { data } = payment;
         await res.redirect(data.authorization_url);
       }
+
       return res.status(404).json({
         status: 404,
         message: `Dear ${firstName}, You do not have item(s) in cart`,
@@ -70,13 +75,6 @@ class orderController {
 
     try {
       const result = await paystackObjects.verify(ref);
-      // const result = await paystackObjects.verifyPayment(ref);
-      if (!result) {
-        return res.status(400).json({
-          status: 400,
-          message: 'Unable to verify payment',
-        });
-      }
       const { email } = result.data.customer;
       const user = await db.query(UserModel.findOne({ email }));
       const { _id, firstName } = user;
