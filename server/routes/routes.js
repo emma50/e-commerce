@@ -7,6 +7,7 @@ import users from './users';
 import items from './items';
 import cart from './cart';
 import order from './order';
+import admin from './admin';
 
 export default (app) => {
   app.use(cors());
@@ -14,6 +15,7 @@ export default (app) => {
   app.use(morgan('combined', { stream: winston.stream }));
   app.use(bodyParser.urlencoded({ extended: true }));
   app.use(bodyParser.json());
+  app.use('/api/v1/users', admin);
   app.use('/api/v1/auth', users);
   app.use('/api/v1/items', items);
   app.use('/api/v1/cart', cart);
