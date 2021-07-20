@@ -7,6 +7,7 @@ import users from './users';
 import items from './items';
 import cart from './cart';
 import order from './order';
+import admin from './admin';
 
 export default (app) => {
   app.use(cors());
@@ -18,4 +19,5 @@ export default (app) => {
   app.use('/api/v1/items', items);
   app.use('/api/v1/cart', cart);
   app.use('/api/v1/order', order);
+  app.use('/api/v1/users', admin);
 };
