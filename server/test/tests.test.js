@@ -559,6 +559,33 @@ describe('Test order endpoint User', () => {
     res.status.should.be.equal(404);
     res.body.should.be.a('object');
   });
+});
+
+describe('Test all users endpoint Admin', () => {
+  it('should view all users', async () => {
+    const res = await chai.request(server)
+      .get('/api/v1/users/')
+      .set('x-auth-token', adminToken);
+    res.status.should.be.equal(200);
+    res.body.should.be.a('object');
+  });
+  it('should fail to view all users if token is invalid', async () => {
+    const res = await chai.request(server)
+      .get('/api/v1/users/')
+      .set('x-auth-token', '');
+    res.status.should.be.equal(401);
+    res.body.should.be.a('object');
+  });
+});
+
+describe('Test all users endpoint User', () => {
+  it('should fail to view all users if User', async () => {
+    const res = await chai.request(server)
+      .get('/api/v1/users/')
+      .set('x-auth-token', userToken);
+    res.status.should.be.equal(401);
+    res.body.should.be.a('object');
+  });
   after(() => {
     mongoose.connection.collection('users').drop();
     mongoose.connection.collection('items').drop();

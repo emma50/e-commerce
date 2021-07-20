@@ -15,9 +15,9 @@ export default (app) => {
   app.use(morgan('combined', { stream: winston.stream }));
   app.use(bodyParser.urlencoded({ extended: true }));
   app.use(bodyParser.json());
-  app.use('/api/v1/users', admin);
   app.use('/api/v1/auth', users);
   app.use('/api/v1/items', items);
   app.use('/api/v1/cart', cart);
   app.use('/api/v1/order', order);
+  app.use('/api/v1/users', admin);
 };

@@ -10,3 +10,5 @@ const { verifyToken } = auth;
 const { viewAllUsers } = adminController;
 
 router.get('', verifyToken, isAdminCheck, viewAllUsers);
+
+export default router;
