@@ -1,4 +1,5 @@
 import current from './current';
+import trimAndUppercase from './trimAndUppercase';
 
 export default class itemObjects {
   static async currentItem(req, res, next) {
@@ -7,9 +8,9 @@ export default class itemObjects {
 
   static newItem(req) {
     const values = {
-      title: req.body.title,
-      description: req.body.description,
-      category: req.body.category,
+      title: trimAndUppercase(req.body.title),
+      description: trimAndUppercase(req.body.description),
+      category: trimAndUppercase(req.body.category),
       price: parseFloat(req.body.price).toFixed(2),
     };
     return values;

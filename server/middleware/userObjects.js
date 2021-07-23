@@ -1,4 +1,5 @@
 import current from './current';
+import trimAndUppercase from './trimAndUppercase';
 
 export default class userObjects {
   static async currentUser(req, res, next) {
@@ -8,8 +9,8 @@ export default class userObjects {
   static newUser(hash, req) {
     const values = {
       email: req.body.email,
-      firstName: req.body.firstName,
-      lastName: req.body.lastName,
+      firstName: trimAndUppercase(req.body.firstName),
+      lastName: trimAndUppercase(req.body.lastName),
       hash,
     };
     return values;
