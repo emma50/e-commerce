@@ -14,7 +14,7 @@ class itemController {
     } catch (error) { return res.status(500).json({ message: error }); }
   }
 
-  static async createItems(req, res) {
+  static async createItem(req, res) {
     const { firstName } = req.user;
     const values = itemObjects.newItem(req);
 

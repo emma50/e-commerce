@@ -13,7 +13,7 @@ const router = express.Router();
 const { verifyToken } = auth;
 const {
   allItems,
-  createItems,
+  createItem,
   updateItem,
   deleteItem,
 } = itemController;
@@ -24,7 +24,7 @@ router.post('',
   isAdminCheck,
   allValidator(validateItem),
   itemObjects.currentItem,
-  createItems);
+  createItem);
 router.patch('/:itemid', verifyToken, isAdminCheck, allValidator(validateUpdatedItem), updateItem);
 router.delete('/:itemid', verifyToken, isAdminCheck, deleteItem);
 

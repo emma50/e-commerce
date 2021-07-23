@@ -1,0 +1,79 @@
+path:
+  /api/v1/cart/{itemid}:
+    post:
+      tags:
+        - user
+      summary: User can add an item to their cart 
+      description: Allow user to add an item to their cart
+      security:
+        - bearerAuth: []
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: quantity
+          description: quantity of a specific item added to cart
+          schema:
+            $ref: '#/definitions/cart/quantity'
+        - in: path
+          name: itemid
+          description: item added to cart
+          type: string
+          required: true
+      responses:
+        201:
+          description: Cart created successfully
+        400:
+          description: Bad request
+        401:
+          description: Invalid token or missing token
+        500:
+          description: Internal server error
+    delete:
+      tags:
+        - user
+      summary: Delete your cart
+      description: User can delete their cart
+      security:
+        - bearerAuth: []
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: itemid
+          description: Item ID
+          type: string
+          required: true
+      responses:
+        200:
+          description: Successfully deleted your cart
+        401:
+          description: Denies access to the resource if its not the authenticated
+        500:
+          description: Internal server error     
+  /api/v1/cart:
+    get:
+      tags:
+        - user
+      summary: User can get cart
+      description: Allow user to get cart
+      security:
+        - bearerAuth: []
+      produces:
+        - application/json
+      responses:
+        200:
+          description: Successfully get cart
+        401:
+          description: Denies access to the resource if not authenticated
+        500:
+          description: Internal server error
+definitions:
+  cart:
+    type: object
+    required:
+      - quantity
+    properties:
+      quantity:
+        type: integer
+        example: 2

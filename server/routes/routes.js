@@ -2,6 +2,8 @@ import cors from 'cors';
 import morgan from 'morgan';
 import bodyParser from 'body-parser';
 import helmet from 'helmet';
+import swaggerUi from 'swagger-ui-express';
+import swaggerSpec from '../config/swagger';
 import winston from '../config/winston';
 import users from './users';
 import items from './items';
@@ -20,4 +22,9 @@ export default (app) => {
   app.use('/api/v1/cart', cart);
   app.use('/api/v1/order', order);
   app.use('/api/v1/users', admin);
+  app.use('/api/v1/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+  app.use('/api/v1$', (req, res) => {
+    res.status(200).json({ status: 200, message: 'Welcome to E-commerce application', version: '1.0.0' });
+  });
+  app.use((req, res) => res.status(404).json({ status: 404, message: 'Hello, page not found' }));
 };

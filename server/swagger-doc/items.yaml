@@ -1,0 +1,109 @@
+path:
+  /api/v1/items:
+    post:
+      tags:
+        - admin
+      summary: Admin can add an item
+      description: Allow admin to add an item on E-commerce Platform
+      security:
+        - bearerAuth: []
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: item
+          description: new item to be created
+          schema:
+            $ref: '#/definitions/item'
+      responses:
+        201:
+          description: Item created successfully
+        400:
+          description: Bad request
+        401:
+          description: Invalid token or missing token
+        500:
+          description: Internal server error
+    get:
+      tags:
+        - user
+      summary: Gets all items
+      description: User can view all items
+      security:
+        - bearerAuth: []
+      produces:
+        - application/json
+      responses:
+        200:
+          description: Successfully get items
+        401:
+          description: Denies access to the resource if not authenticated
+        500:
+          description: Internal server error
+  /api/v1/items/{itemid}:
+    delete:
+      tags:
+        - admin
+      summary: Delete a specific item
+      description: Admin can delete a specific item
+      security:
+        - bearerAuth: []
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: itemid
+          description: Item ID
+          type: string
+          required: true
+      responses:
+        200:
+          description: Successfully deleted a specific item
+        401:
+          description: Denies access to the resource if its not the Admin
+        500:
+          description: Internal server error
+    patch:
+      tags:
+        - admin
+      summary: Allows admin to update an item
+      description: Admin can update an item
+      security:
+        - bearerAuth: []
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: itemid
+          description: Item Id
+          type: string
+          required: true
+      responses:
+        200:
+          description: Successfully updated an item
+        401:
+          description: Denies access to the resource if its not the Admin
+        500:
+          description: Internal server error
+definitions:
+  item:
+    type: object
+    required:
+      - title
+      - description
+      - category
+      - price
+    properties:
+      title:
+        type: string
+        example: Handbag
+      description:
+        type: string
+        example: A nice blue and convenient Handbag
+      category:
+        type: string
+        example: Bag
+      price:
+        type: integer
+        example: 20
+        
