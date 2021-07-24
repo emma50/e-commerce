@@ -1,5 +1,5 @@
 import current from './current';
-import trimAndUppercase from './trimAndUppercase';
+import shape from './shape';
 
 export default class userObjects {
   static async currentUser(req, res, next) {
@@ -8,11 +8,19 @@ export default class userObjects {
 
   static newUser(hash, req) {
     const values = {
-      email: req.body.email,
-      firstName: trimAndUppercase(req.body.firstName),
-      lastName: trimAndUppercase(req.body.lastName),
+      email: shape.trim(req.body.email),
+      firstName: shape.uppercase(req.body.firstName),
+      lastName: shape.uppercase(req.body.lastName),
+      mobileNo: shape.trim(req.body.mobileNo),
       hash,
     };
+    // const values = {
+    //   email: req.body.email,
+    //   firstName: req.body.firstName,
+    //   lastName: req.body.lastName,
+    //   mobileNo: req.body.mobileNo,
+    //   hash,
+    // };
     return values;
   }
 }

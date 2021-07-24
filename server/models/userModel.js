@@ -22,6 +22,10 @@ const userSchema = new Schema({
     required: [true, 'Please enter a valid password'],
     minlength: [6, 'Minimum password length must be 6 characters'],
   },
+  mobileNo: {
+    type: String,
+    required: true,
+  },
   register_date: {
     type: Date,
     default: Date.now,
