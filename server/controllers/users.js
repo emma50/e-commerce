@@ -3,17 +3,30 @@ import authTok from '../helpers/authentication/auth-token';
 import userObjects from '../middleware/userObjects';
 import db from '../db/index';
 import UserModel from '../models/userModel';
+import emailSender from '../middleware/nodemailer';
+// import sendSMS from '../middleware/twilo';
 
 dotenv.config();
 
 class userController {
-  static async userSignup(req, res) {
+  static async userSignup(req, res, next) {
     const hash = authTok.hashPassword(req.body.password);
     const values = userObjects.newUser(hash, req);
 
     try {
       const user = new UserModel(values);
+      const emailObj = {
+        subject: 'E-commerce app',
+        text: `Welcome ${user.firstName} to E-commerce app`,
+      };
       if (user.email === process.env.ADMIN) user.isAdmin = true;
+
+      const nodemailerInfo = await emailSender(user.email, emailObj.subject, emailObj.text, next);
+      // const twilioSMSInfo = await sendSMS(user.mobileNo, emailObj.text, next);
+      if (!nodemailerInfo.messageId) {
+        res.status(400).json({ status: 400, message: 'Email connection failure' });
+      }
+
       const saveUser = user.save();
       const newUser = await db.query(saveUser);
       const {

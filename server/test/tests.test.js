@@ -163,6 +163,34 @@ describe('Test signup & signin endpoints', () => {
     res.status.should.be.equal(400);
     res.body.error.should.have.eql('"password" length must be less than or equal to 50 characters long');
   });
+  it('Should fail if mobile number is omitted', async () => {
+    const res = await request
+      .post('/api/v1/auth/signup/')
+      .send(userInfo.omittedMobileNo);
+    res.status.should.be.equal(400);
+    res.body.error.should.have.eql('"mobileNo" is not allowed to be empty');
+  });
+  it('Should fail if mobile number is not string', async () => {
+    const res = await request
+      .post('/api/v1/auth/signup/')
+      .send(userInfo.mobileNoNotString);
+    res.status.should.be.equal(400);
+    res.body.error.should.have.eql('"mobileNo" must be a string');
+  });
+  it('Should fail if mobile number length is less than 6 characters', async () => {
+    const res = await request
+      .post('/api/v1/auth/signup/')
+      .send(userInfo.lowMobileNoLength);
+    res.status.should.be.equal(400);
+    res.body.error.should.have.eql('"mobileNo" length must be at least 6 characters long');
+  });
+  it('Should fail if mobile number length is more than 20 characters', async () => {
+    const res = await request
+      .post('/api/v1/auth/signup/')
+      .send(userInfo.highMobileNoLength);
+    res.status.should.be.equal(400);
+    res.body.error.should.have.eql('"mobileNo" length must be less than or equal to 20 characters long');
+  });
 
   // SIGNIN
   it('Should signin an admin', async () => {
@@ -589,5 +617,7 @@ describe('Test all users endpoint User', () => {
   after(() => {
     mongoose.connection.collection('users').drop();
     mongoose.connection.collection('items').drop();
+    mongoose.connection.collection('carts').drop();
+    mongoose.connection.collection('orders').drop();
   });
 });
