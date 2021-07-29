@@ -16,8 +16,8 @@ import admin from './admin';
 
 export default (app) => {
   const limiter = rateLimit({
-    windowMs: 15 * 60 * 1000, // 15 minutes
-    max: 100, // limit each IP to 100 requests per windowMs
+    windowMs: 25 * 60 * 1000, // 25 minutes
+    max: 400, // limit each IP to 100 requests per windowMs
   });
   app.use(cors());
   app.use(helmet());
