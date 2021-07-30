@@ -13,12 +13,6 @@ export default class itemObjects {
       category: shape.uppercase(req.body.category),
       price: parseFloat(req.body.price).toFixed(2),
     };
-    // const values = {
-    //   title: req.body.title,
-    //   description: req.body.description,
-    //   category: req.body.category,
-    //   price: parseFloat(req.body.price).toFixed(2),
-    // };
     return values;
   }
 }

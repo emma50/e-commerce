@@ -4,7 +4,7 @@ import userObjects from '../middleware/userObjects';
 import db from '../db/index';
 import UserModel from '../models/userModel';
 import emailSender from '../middleware/nodemailer';
-// import sendSMS from '../middleware/twilo';
+// import sendSMS from '../middleware/twilio';
 
 dotenv.config();
 
