@@ -16,8 +16,8 @@ import admin from './admin';
 
 export default (app) => {
   const limiter = rateLimit({
-    windowMs: 25 * 60 * 1000, // 25 minutes
-    max: 400, // limit each IP to 100 requests per windowMs
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 400, // limit each IP to 400 requests per windowMs
   });
   app.use(cors());
   app.use(helmet());
@@ -39,12 +39,13 @@ export default (app) => {
       message: 'Welcome to E-commerce application',
       version: '1.0.0',
       author: 'Okwuidegbe Emmanuel',
-      email: 'okwuidegbeemmauel@gmail.com',
+      email: 'okwuidegbeemmanuel@gmail.com',
       about: 'A simple E-commerce application.',
+      linkedinProfile: 'https://www.linkedin.com/in/emmanuel-okwuidegbe-0953ab153/',
     });
   });
   app.use((req, res) => res.status(404).json({
     status: 404,
-    message: 'Hello, page not found. Try connecting using an api testing application like POSTMAN',
+    message: 'Sorry, page not found. Try connecting to this api using an api testing application like POSTMAN',
   }));
 };
