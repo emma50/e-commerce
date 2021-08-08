@@ -13,6 +13,7 @@ import items from './items';
 import cart from './cart';
 import order from './order';
 import admin from './admin';
+import error from '../middleware/error';
 
 export default (app) => {
   const limiter = rateLimit({
@@ -48,4 +49,5 @@ export default (app) => {
     status: 404,
     message: 'Sorry, page not found. Try connecting to this api using an api testing application like POSTMAN',
   }));
+  app.use(error);
 };

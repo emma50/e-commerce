@@ -28,7 +28,6 @@ async function emailSender(to, subject, text, next) {
     const info = await transporter.sendMail(mailOptions);
     return info;
   } catch (error) {
-    console.log(error);
     return next(error);
   }
 }

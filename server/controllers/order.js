@@ -56,7 +56,6 @@ class orderController {
             message: `Unable to accept payment for ${firstName}`,
           });
         }
-        console.log(payment);
         const { data } = payment;
         await res.redirect(data.authorization_url);
       }
