@@ -16,10 +16,8 @@ async function sendSMS(to, body, next) {
         to,
       });
 
-    console.log(result);
     return result;
   } catch (error) {
-    console.log(error);
     return next(error);
   }
 }

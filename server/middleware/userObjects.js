@@ -14,13 +14,7 @@ export default class userObjects {
       mobileNo: shape.trim(req.body.mobileNo),
       hash,
     };
-    // const values = {
-    //   email: req.body.email,
-    //   firstName: req.body.firstName,
-    //   lastName: req.body.lastName,
-    //   mobileNo: req.body.mobileNo,
-    //   hash,
-    // };
+
     return values;
   }
 }

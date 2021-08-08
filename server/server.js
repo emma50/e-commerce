@@ -1,4 +1,5 @@
 import express from 'express';
+import 'express-async-errors';
 import 'airbnb-browser-shims';
 import routes from './routes/routes';
 import winston from './config/winston';
@@ -13,10 +14,6 @@ if (process.env.NODE_ENV === 'test') {
 } else {
   envPort = 3000;
 }
-
-process.on('unhandledRejection', (e) => {
-  console.log(e);
-});
 
 const port = process.env.PORT || envPort;
 
