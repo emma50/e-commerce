@@ -13,6 +13,8 @@ let request;
 let adminToken;
 let userToken;
 let userToken2;
+let userToken3;
+let userID3;
 let itemId;
 let itemId2;
 
@@ -50,6 +52,15 @@ describe('Test signup & signin endpoints', () => {
     res.body.data.firstName.should.be.equal('Emman');
     res.body.data.lastName.should.be.equal('Nuell');
     res.body.data.email.should.be.equal('emman@yahoo.com');
+  });
+  it('Should signup a third user', async () => {
+    const res = await request
+      .post('/api/v1/auth/signup/')
+      .send(userInfo.signup3);
+    res.status.should.be.equal(201);
+    res.body.data.firstName.should.be.equal('Markie');
+    res.body.data.lastName.should.be.equal('Nuella');
+    res.body.data.email.should.be.equal('emma23121994@gmail.com');
   });
   it('Should fail if email is omitted', async () => {
     const res = await request
@@ -220,6 +231,16 @@ describe('Test signup & signin endpoints', () => {
     res.body.data.should.have.property('token');
     userToken2 = res.body.data.token;
   });
+  it('Should signin a third user', async () => {
+    const res = await request
+      .post('/api/v1/auth/signin')
+      .send(userInfo.signin3);
+    res.status.should.be.equal(200);
+    res.body.should.be.a('object');
+    res.body.data.should.have.property('token');
+    userToken3 = res.body.data.token;
+    userID3 = res.body.data.id;
+  });
   it('should fail if email is omitted', async () => {
     const res = await request
       .post('/api/v1/auth/signin/')
@@ -243,6 +264,34 @@ describe('Test signup & signin endpoints', () => {
       .post('/api/v1/auth/signin/')
       .send(userInfo.invalidPassword);
     res.should.have.status(400);
+    res.body.should.be.a('object');
+  });
+  it('should fail to request password reset if email is incorrect or invalid', async () => {
+    const res = await request
+      .post('/api/v1/auth/password-reset-request/')
+      .send(userInfo.invalidResetPasswordEmail);
+    res.should.have.status(400);
+    res.body.should.be.a('object');
+  });
+  it('should request password reset if email is valid', async () => {
+    const res = await request
+      .post('/api/v1/auth/password-reset-request/')
+      .send(userInfo.resetPasswordEmail);
+    res.should.have.status(200);
+    res.body.should.be.a('object');
+  });
+  it('should fail to reset password if ID or Token are invalid or expired', async () => {
+    const res = await request
+      .post('/api/v1/auth/password-reset?token=mememinimie&id=12345asdfghertyuqwe')
+      .send(userInfo.invalidResetPassword);
+    res.should.have.status(400);
+    res.body.should.be.a('object');
+  });
+  it('should reset password if ID and Token are valid', async () => {
+    const res = await request
+      .post(`/api/v1/auth/password-reset?token=${userToken3}&id=${userID3}`)
+      .send(userInfo.resetPassword);
+    res.should.have.status(200);
     res.body.should.be.a('object');
   });
 });

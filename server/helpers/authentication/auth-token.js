@@ -2,8 +2,10 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import redis from 'redis';
 import dotenv from 'dotenv';
+import * as Promise from 'bluebird';
 
 dotenv.config();
+Promise.promisifyAll(redis);
 
 const client = redis.createClient();
 
@@ -28,14 +30,20 @@ const authToken = {
     return Promise.resolve(token);
   },
 
-  setToken(key, value) {
-    Promise.resolve(client.set(key, value));
+  async setToken(key, value) {
+    await client.setAsync(key, value);
+  },
+
+  async getToken(key) {
+    const val = await client.getAsync(key);
+    return val;
   },
 
   async generateSession(id, uEmail) {
-    const token = await this.generateToken(id, uEmail);
-    await this.setToken('userToken', token);
-    return token;
+    const jwtoken = await this.generateToken(id, uEmail);
+    await this.setToken(uEmail, jwtoken);
+    const userToken = await this.getToken(uEmail);
+    return userToken;
   },
 };
 
