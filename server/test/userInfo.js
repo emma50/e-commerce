@@ -187,6 +187,29 @@ const userInfo = {
     email: 'emman@yahoo.com',
     password: '123456789',
   },
+  signup3: {
+    firstName: 'Markie',
+    lastName: 'Nuella',
+    email: 'emma23121994@gmail.com',
+    password: '12345678910',
+    mobileNo: '+23408123456799',
+  },
+  signin3: {
+    email: 'emma23121994@gmail.com',
+    password: '12345678910',
+  },
+  resetPasswordEmail: {
+    email: 'emma23121994@gmail.com',
+  },
+  invalidResetPasswordEmail: {
+    email: 'emma2312199com',
+  },
+  resetPassword: {
+    password: '123456789101',
+  },
+  invalidResetPassword: {
+    password: '1',
+  },
 };
 
 export default userInfo;
