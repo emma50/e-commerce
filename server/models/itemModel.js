@@ -19,6 +19,9 @@ const itemSchema = new Schema({
     type: Number,
     required: true,
   },
+  item_img: {
+    type: String,
+  },
   date_added: {
     type: Date,
     default: Date.now,

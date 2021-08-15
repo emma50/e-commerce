@@ -1,3 +1,4 @@
+import fs from 'fs';
 import itemObjects from '../middleware/itemObjects';
 import db from '../db/index';
 import ItemModel from '../models/itemModel';
@@ -17,6 +18,7 @@ class itemController {
   static async createItem(req, res) {
     const { firstName } = req.user;
     const values = itemObjects.newItem(req);
+    values.item_img = req.file.filename;
 
     try {
       const item = new ItemModel(values);
@@ -56,11 +58,15 @@ class itemController {
   }
 
   static async deleteItem(req, res) {
+    const fsPromises = fs.promises;
     const itemId = req.params.itemid;
 
     try {
-      const item = await db.query(ItemModel.findByIdAndDelete({ _id: itemId }));
-      if (itemId !== item.id) return res.status(400).json({ status: 400, message: 'The Item ID is invalid' });
+      const item = await db.query(ItemModel.findByIdAndDelete(itemId));
+      const { _id } = item;
+      const id = _id.toString();
+      if (itemId !== id) return res.status(400).json({ status: 400, message: 'The Item ID is invalid' });
+      await fsPromises.unlink(`./uploads/${item.item_img}`);
       return res.status(200).json({
         status: 200,
         message: `You successfully deleted the item with the ID: ${item.id}`,
