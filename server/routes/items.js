@@ -1,4 +1,5 @@
 import express from 'express';
+import multer from 'multer';
 
 import itemController from '../controllers/items';
 import auth from '../helpers/authentication/auth';
@@ -9,6 +10,12 @@ import itemObjects from '../middleware/itemObjects';
 import isAdminCheck from '../middleware/isAdmin';
 
 const router = express.Router();
+const storage = multer.diskStorage({
+  destination: (req, file, callback) => callback(null, './uploads'),
+  filename: (req, file, callback) => callback(null, file.originalname),
+});
+
+const upload = multer({ storage });
 
 const { verifyToken } = auth;
 const {
@@ -20,6 +27,7 @@ const {
 
 router.get('', allItems);
 router.post('',
+  upload.single('uploaded_file'),
   verifyToken,
   isAdminCheck,
   allValidator(validateItem),

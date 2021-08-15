@@ -4,12 +4,14 @@ const itemInfo = {
     description: 'Flashy pink handbag',
     category: 'Bag',
     price: 20,
+    item_img: 'screenshot.png',
   },
   newItem2: {
     title: 'Schoolbag',
     description: 'The best school bag',
     category: 'Bag',
     price: 8,
+    item_img: 'screenshot.png',
   },
   omitTitle: {
     description: 'Flashy pink handbag',
