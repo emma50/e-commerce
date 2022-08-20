@@ -4,6 +4,6 @@ ___
 
 
 ## E-COMMERCE
-is a simple e-commerce application.
+is a simple e-commerce api.
 
 ___
